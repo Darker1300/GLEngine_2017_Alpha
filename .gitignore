@@ -7,3 +7,5 @@ GLEngine/Debug/
 temp/
 *.opensdf
 /.vs/GLEngine/v14/.suo
+GLEngine/x64/Debug/
+GLEngine/x64/Release/
