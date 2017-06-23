@@ -278,26 +278,16 @@ namespace GeometryHelper {
 			modelRenderData.push_back(renderData);
 			// Set indices size (in this case == vertices size)
 			renderData->GenerateBuffers(false);
+
 			renderData->Bind();
-
 			renderData->SetIndicesSize((UINT)vertices.size());
-
-			glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(OBJVertex), vertices.data(), GL_STATIC_DRAW);
-
-			glEnableVertexAttribArray(0);
-			glEnableVertexAttribArray(1);
-			glEnableVertexAttribArray(2);
-			glEnableVertexAttribArray(3);
-			glEnableVertexAttribArray(4);
-
-			glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(OBJVertex), (void*)offsetof(OBJVertex, OBJVertex::position));
-			glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(OBJVertex), (void*)offsetof(OBJVertex, OBJVertex::uv));
-			glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(OBJVertex), (void*)offsetof(OBJVertex, OBJVertex::normal));
-			glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(OBJVertex), (void*)offsetof(OBJVertex, OBJVertex::tangent));
-			glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(OBJVertex), (void*)offsetof(OBJVertex, OBJVertex::bitangent));
-
+			renderData->FillVertexBuffer(&vertices[0], vertices.size());
+			renderData->SetFloatAttributePointer(0, 4, sizeof(OBJVertex), offsetof(OBJVertex, OBJVertex::position));
+			renderData->SetFloatAttributePointer(1, 2, sizeof(OBJVertex), offsetof(OBJVertex, OBJVertex::uv));
+			renderData->SetFloatAttributePointer(2, 4, sizeof(OBJVertex), offsetof(OBJVertex, OBJVertex::normal));
+			renderData->SetFloatAttributePointer(3, 4, sizeof(OBJVertex), offsetof(OBJVertex, OBJVertex::tangent));
+			renderData->SetFloatAttributePointer(4, 4, sizeof(OBJVertex), offsetof(OBJVertex, OBJVertex::bitangent));
 			renderData->Unbind();
-
 		}
 
 		return modelRenderData;

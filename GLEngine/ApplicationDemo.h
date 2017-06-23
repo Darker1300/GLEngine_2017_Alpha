@@ -30,6 +30,11 @@ public:
 	int GUIDraw();
 
 protected:
+	bool m_doBloomEffect;
+	bool m_doDistortEffect;
+	unsigned int m_drawCalls;
+	unsigned int m_renderTargetCalls;
+
 	Camera* m_camera;
 
 	Shader* m_primativeShader;
@@ -38,6 +43,7 @@ protected:
 	Shader* m_phongShader;
 	Shader* m_depthTargetShader;
 	Shader* m_bloomShader;
+	Shader* m_distortShader;
 
 	Texture* m_texWhite;
 	Texture* m_texGroundDiffuse;
@@ -49,6 +55,7 @@ protected:
 	Texture* m_texSpearNormal;
 
 	RenderTarget* m_renderTarget1;
+	RenderTarget* m_renderTarget2;
 
 	RenderData* m_groundRenderData;
 	RenderData* m_signRenderData;
@@ -60,7 +67,8 @@ protected:
 	Material* m_groundMat;
 	Material* m_signMat;
 	Material* m_spearMat;
-	Material* m_screenMat;
+	Material* m_screenMat1;
+	Material* m_screenMat2;
 	Material* m_lightObjMat;
 
 	RenderableObject* m_ground;

@@ -4,6 +4,8 @@
 #include <vector>
 #include "Camera.h"
 
+class Transform;
+
 class BoundingSphere {
 public:
 
@@ -14,7 +16,7 @@ public:
 	void Fit(T* _first, unsigned _count);
 
 
-	bool FrustumCollision(const Camera::Frustum& _frustum) const;
+	bool FrustumCollision(const Camera::Frustum& _frustum, const Transform& _transform) const;
 
 	glm::vec3 centre;
 	float radius;

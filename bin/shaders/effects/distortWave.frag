@@ -22,7 +22,11 @@ void main()
 	//float distort = vUV.y;// ( cos(distortTime / 1000) + vUV.y + 1 ) * 0.5f;
 	// vec2 distort = ( vec2( sin( vUV.x + distortTime), cos( vUV.y + distortTime ) ) + 1 ) * 0.5;
 	vec2 texcoord = vUV;
-  	texcoord.x += sin(texcoord.y * 4*2*3.14159 + distortTime) / 100;
+	float s = sin(texcoord.y * 4 * (2*3.14159) + distortTime) / 100;
+	float c = cos(texcoord.x * 4 * (2*3.14159) + distortTime) / 100;
+	//float l = mod(distortTime, 1.0f);
+  	texcoord.y += c;//tan(texcoord.y * 4*2*3.14159 + distortTime) / 100;
+	texcoord.x += s; 
 	
 	vec4 colourTex = texture(colourMap, texcoord);
 	vec4 depthTex = texture(depthMap, vUV);

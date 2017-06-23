@@ -8,7 +8,7 @@ Camera* GLE::MAIN_CAM = nullptr;
 
 Camera::Camera()
 	: forward(), position()
-	, m_FOV(0.25f), m_aspectRatio(16.0f / 9.0f), m_near(0.1f), m_far(100.0f)
+	, m_FOV(0.25f), m_aspectRatio(16.0f / 9.0f), m_near(0.001f), m_far(100.0f)
 {
 }
 

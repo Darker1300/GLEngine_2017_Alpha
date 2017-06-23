@@ -21,13 +21,13 @@ void main()
             sum += texture2D(colourMap, vUV + vec2(j, i)*0.004) * 0.25;
         }
    }
-       if (texture2D(colourMap, vUV).r < 0.3)
+       if (texture2D(depthMap, vUV).r < 0.3)
     {
        fragColour = sum*sum*0.012 + texture2D(colourMap, vUV);
     }
     else
     {
-        if (texture2D(colourMap, vUV).r < 0.5)
+        if (texture2D(depthMap, vUV).r < 0.5)
         {
             fragColour = sum*sum*0.009 + texture2D(colourMap, vUV);
         }

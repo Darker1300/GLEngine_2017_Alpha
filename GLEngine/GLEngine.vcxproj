@@ -82,7 +82,7 @@
     <OutDir>$(SolutionDir)builds\</OutDir>
     <IntDir>$(SolutionDir)temp\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
-    <IncludePath>$(SolutionDir)deps;$(SolutionDir)deps\gl_core_4_4;$(SolutionDir)deps\glfw\include;$(SolutionDir)deps\glm;$(SolutionDir)deps\stb;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)deps;$(SolutionDir)deps\gl_core_4_4;$(SolutionDir)deps\glfw\include;$(SolutionDir)deps\glm;$(SolutionDir)deps\stb;$(SolutionDir)deps\imgui;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)deps\glfw\lib-vc2015;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -98,7 +98,7 @@
     <OutDir>$(SolutionDir)builds\</OutDir>
     <IntDir>$(SolutionDir)temp\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
-    <IncludePath>$(SolutionDir)deps;$(SolutionDir)deps\gl_core_4_4;$(SolutionDir)deps\glfw\include;$(SolutionDir)deps\glm;$(SolutionDir)deps\stb;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)deps;$(SolutionDir)deps\gl_core_4_4;$(SolutionDir)deps\glfw\include;$(SolutionDir)deps\glm;$(SolutionDir)deps\stb;$(SolutionDir)deps\imgui;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)deps\glfw\lib-vc2015;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

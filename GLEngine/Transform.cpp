@@ -26,7 +26,7 @@ Transform::~Transform()
 {
 }
 
-glm::mat4 Transform::GetRotationMatrix()
+glm::mat4 Transform::GetRotationMatrix() const
 {
 	glm::mat4 rotMat = glm::mat4();
 	// rotate around to a given bearing: yaw
@@ -38,7 +38,7 @@ glm::mat4 Transform::GetRotationMatrix()
 	return rotMat;
 }
 
-glm::mat4 Transform::GetLocalMatrix()
+glm::mat4 Transform::GetLocalMatrix() const
 {
 	glm::mat4 local = glm::mat4();
 	// translate

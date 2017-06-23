@@ -23,6 +23,7 @@
 #include "Light.h"
 #include "RenderTarget.h"
 #include "ParticleSystem.h"
+#include <imgui\imgui.h>
 
 ApplicationDemo::ApplicationDemo()
 	: ApplicationBase("Game Engine Demo", 1280, 720) {}
@@ -41,12 +42,16 @@ int ApplicationDemo::Start()
 	// Turn on Wireframe:
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+	m_drawCalls = 0;
+	m_renderTargetCalls = 0;
+	m_doBloomEffect = false;
+	m_doDistortEffect = false;
+
 	// Set up Camera
 	m_camera = new Camera();
 	m_camera->position += Vector3::backward * 18;
 	m_camera->position += Vector3::up * 5;
 	m_camera->yaw += glm::radians(180.f);
-	//m_camera->SetAsMain();
 
 	// Shaders
 	m_primativeShader = new Shader("./shaders/basic.vert", "./shaders/basic.frag");
@@ -55,6 +60,7 @@ int ApplicationDemo::Start()
 	m_phongShader = new Shader("./shaders/phongOBJ.vert", "./shaders/phongOBJ.frag");
 	m_depthTargetShader = new Shader("./shaders/effects/depthTarget.vert", "./shaders/effects/depthTarget.frag");
 	m_bloomShader = new Shader("./shaders/effects/bloom.vert", "./shaders/effects/bloom.frag");
+	m_distortShader = new Shader("./shaders/effects/distortWave.vert", "./shaders/effects/distortWave.frag");
 
 	// Textures
 	m_texWhite = new Texture("./textures/white.png");
@@ -71,6 +77,9 @@ int ApplicationDemo::Start()
 	m_renderTarget1 = new RenderTarget();
 	m_renderTarget1->Generate(GLE::APP->GetWindowWidth(), GLE::APP->GetWindowHeight());
 
+	m_renderTarget2 = new RenderTarget();
+	m_renderTarget2->Generate(GLE::APP->GetWindowWidth(), GLE::APP->GetWindowHeight());
+
 	// RenderData
 	m_groundRenderData = GeometryHelper::CreatePlane(10, 10, 10, 10);
 	m_signRenderData = GeometryHelper::CreatePlane(2, 2, 4, 2);
@@ -85,7 +94,8 @@ int ApplicationDemo::Start()
 	m_groundMat = new Material(m_phongShader);
 	m_spearMat = new Material(m_phongShader);
 	m_signMat = new Material(m_tintTexShader);
-	m_screenMat = new Material(m_bloomShader);
+	m_screenMat1 = new Material(m_bloomShader);
+	m_screenMat2 = new Material(m_distortShader);
 	m_lightObjMat = new Material(m_depthTargetShader);
 
 	// Set Textures
@@ -99,8 +109,11 @@ int ApplicationDemo::Start()
 	m_spearMat->m_textures["diffuseMap"] = m_texSpearDiffuse;
 	m_spearMat->m_textures["specularMap"] = m_texSpearSpecular;
 
-	m_screenMat->m_textures["depthMap"] = m_renderTarget1->m_depth;
-	m_screenMat->m_textures["colourMap"] = m_renderTarget1->m_colour;
+	m_screenMat1->m_textures["depthMap"] = m_renderTarget1->m_depth;
+	m_screenMat1->m_textures["colourMap"] = m_renderTarget1->m_colour;
+
+	m_screenMat2->m_textures["depthMap"] = m_renderTarget2->m_depth;
+	m_screenMat2->m_textures["colourMap"] = m_renderTarget2->m_colour;
 
 	m_lightObjMat->m_textures["depthMap"] = m_renderTarget1->m_depth;
 	m_lightObjMat->m_textures["colourMap"] = m_renderTarget1->m_colour;
@@ -109,11 +122,11 @@ int ApplicationDemo::Start()
 	m_ground = new RenderableObject(m_groundMat, std::vector<RenderData*>{ m_groundRenderData });
 	m_sign = new RenderableObject(m_signMat, std::vector<RenderData*>{ m_signRenderData });
 	m_spear = new RenderableObject(m_spearMat, m_spearRenderData);
-	m_screenObject = new RenderableObject(m_screenMat, std::vector<RenderData*>{m_screenRenderData});
+	m_screenObject = new RenderableObject(m_screenMat1, std::vector<RenderData*>{m_screenRenderData});
 	m_light = new RenderableObject(m_lightObjMat, std::vector<RenderData*>{m_sphereRenderData});
 
 	// Misc
-	m_lightAlpha = new Light();
+	m_lightAlpha = new Light(m_light->m_transform);
 
 	m_emitter = new ParticleSystem();
 	m_emitter->Initalise(
@@ -135,9 +148,9 @@ int ApplicationDemo::Start()
 	m_screenObject->m_transform.position += Vector3::right * 2;
 
 	float currentTime = (float)glfwGetTime();
-	m_lightAlpha->m_transform.position.x = sinf(currentTime) * 5;
-	m_lightAlpha->m_transform.position.z = cosf(currentTime) * 5;
-	m_lightAlpha->m_transform.position.y = 3;
+	m_lightAlpha->m_transform->position.x = sinf(currentTime) * 5;
+	m_lightAlpha->m_transform->position.z = cosf(currentTime) * 5;
+	m_lightAlpha->m_transform->position.y = 3;
 
 	m_emitter->m_position.z = 6;
 
@@ -155,9 +168,11 @@ int ApplicationDemo::Shutdown()
 	delete m_spear;
 	delete m_sign;
 	delete m_ground;
+	delete m_emitter;
 
 	delete m_lightObjMat;
-	delete m_screenMat;
+	delete m_screenMat2;
+	delete m_screenMat1;
 	delete m_signMat;
 	delete m_spearMat;
 	delete m_groundMat;
@@ -183,6 +198,7 @@ int ApplicationDemo::Shutdown()
 
 	delete m_texWhite;
 
+	delete m_distortShader;
 	delete m_bloomShader;
 	delete m_depthTargetShader;
 	delete m_phongShader;
@@ -204,10 +220,10 @@ int ApplicationDemo::FixedUpdate(double _deltaTime)
 	// Transformations
 	m_spear->m_transform.AddYaw(3.14159265f * (float)_deltaTime * -0.001f);
 
-	m_lightAlpha->m_transform.position.x = sinf((float)glfwGetTime()) * 5;
-	m_lightAlpha->m_transform.position.z = cosf((float)glfwGetTime()) * 5;
-	m_lightAlpha->m_transform.AddYaw(3.14159265f * (float)_deltaTime * 0.8f);
-	m_lightAlpha->m_transform.AddRoll(3.14159265f * (float)_deltaTime * 0.25f);
+	m_light->m_transform.position.x = sinf((float)glfwGetTime()) * 5;
+	m_light->m_transform.position.z = cosf((float)glfwGetTime()) * 5;
+	m_light->m_transform.AddYaw(3.14159265f * (float)_deltaTime * 0.8f);
+	m_light->m_transform.AddRoll(3.14159265f * (float)_deltaTime * 0.25f);
 
 	m_emitter->m_position.x = sinf((float)glfwGetTime()) * -10;
 	m_emitter->m_position.y = cosf((float)glfwGetTime()) * -10;
@@ -219,9 +235,6 @@ int ApplicationDemo::Update(double _deltaTime)
 {
 	if (ApplicationBase::Update(_deltaTime)) return -1;
 
-	std::string fps = "FPS:" + std::to_string(GetFPS()) + " FUPS:" + std::to_string(GetFUPS()) + "\n";
-	printf(fps.c_str());
-
 	return 0;
 }
 
@@ -229,20 +242,26 @@ int ApplicationDemo::Draw()
 {
 	if (ApplicationBase::Draw()) return -1;
 
-	int drawCount = 0;
+	// Reset DrawCall Counter
+	m_drawCalls = 0;
+	m_renderTargetCalls = 0;
 
+	// Calculate Camera
 	glm::mat4 projView = m_camera->GetProjectionViewMatrix();
 	Camera::Frustum frustum = m_camera->GetFrustum();
 
 	// Light Getters
-	glm::vec3 lightPos = m_lightAlpha->m_transform.position;
+	glm::vec3 lightPos = m_light->m_transform.position;
 	glm::vec3 lightDir = m_lightAlpha->GetDirection(m_camera->position);
 
 	// Bind RenderTarget
-	m_renderTarget1->Bind();
+	if (m_doBloomEffect || m_doDistortEffect) {
+		m_renderTarget1->Bind();
+		m_renderTargetCalls++;
+	}
 
 	if (m_ground->FrustrumCollision(frustum)) {
-		drawCount++;
+		m_drawCalls++;
 		// Update material
 		m_ground->Bind();
 		//m_groundMat->ApplyUniformVec3("ambientMat", { 0, 0, 0 }); // { 0.0f, 0.4f, 0.0f });
@@ -269,7 +288,7 @@ int ApplicationDemo::Draw()
 	//m_sphereRenderData->Unbind();
 
 	if (m_sign->FrustrumCollision(frustum)) {
-		drawCount++;
+		m_drawCalls++;
 		// Update material
 		m_sign->Bind();
 		//m_signMat->ApplyUniformVec3("ambientMat", { 0, 0, 0 }); // { 0, 0.5f, 1 });
@@ -282,12 +301,12 @@ int ApplicationDemo::Draw()
 	}
 
 	if (m_light->FrustrumCollision(frustum)) {
-		drawCount++;
+		m_drawCalls++;
 		// Render for Light
 		m_light->Bind();
 		m_groundMat->Bind();
 		m_groundMat->ApplyUniformMat4("projectionViewMatrix", projView);
-		m_groundMat->ApplyUniformMat4("modelMatrix", m_lightAlpha->m_transform.GetLocalMatrix());
+		m_groundMat->ApplyUniformMat4("modelMatrix", m_light->m_transform.GetLocalMatrix());
 		// Render
 		m_light->Render();
 		// Unbind
@@ -295,7 +314,7 @@ int ApplicationDemo::Draw()
 	}
 
 	if (m_spear->FrustrumCollision(frustum)) {
-		drawCount++;
+		m_drawCalls++;
 		// Update material
 		m_spear->Bind();
 		//m_spearMat->ApplyUniformVec3("ambientMat", { 0, 0, 0 });
@@ -313,28 +332,112 @@ int ApplicationDemo::Draw()
 	m_emitter->Draw((float)glfwGetTime(),
 		m_camera->GetLocalMatrix(),
 		projView);
+	m_drawCalls++;
 
-	// Unbind RenderTarget
-	m_renderTarget1->Unbind();
-
-	// Update material
-	m_screenObject->Bind();
 	//m_mirrorMat->ApplyUniformVec3("ambientMat", { 1, 1, 1 });
 	//m_mirrorMat->ApplyUniformMat4("projectionViewMatrix", projView);
 	//m_mirrorMat->ApplyUniformMat4("modelMatrix", m_mirror->m_transform.GetLocalMatrix());
 	//float move = (float)glfwGetTime();// / 1000.0 * 2 * 3.14159 * .75;
 	//m_mirrorMat->ApplyUniformFloat("distortTime", move);
-	// Render
-	m_screenObject->Render();
-	// Unbind
-	m_screenObject->Unbind();
 
-	LOG_ERROR(drawCount);
+	// Unbind RenderTarget
+	if (m_doBloomEffect || m_doDistortEffect) {
+		m_renderTarget1->Unbind();
+
+		const bool bothEffects = m_doBloomEffect && m_doDistortEffect;
+
+		if (bothEffects) {
+			m_screenMat1->m_shader = m_distortShader;
+			m_screenMat2->m_shader = m_bloomShader;
+		}
+		else {
+			m_screenMat1->m_shader = m_doBloomEffect ? m_bloomShader : m_distortShader;
+		}
+
+		if (m_screenMat1->m_shader == m_distortShader) {
+			m_screenMat1->Bind();
+			m_screenMat1->ApplyUniformFloat("distortTime", (float)glfwGetTime());
+			m_screenMat1->Unbind();
+		}
+
+		if (bothEffects) {
+			m_renderTarget2->Bind();
+			m_renderTargetCalls++;
+		}
+
+		m_screenObject->m_material = m_screenMat1;
+		m_screenObject->Bind();
+		m_screenObject->Render();
+		m_drawCalls++;
+		m_screenObject->Unbind();
+
+		if (bothEffects) {
+			m_renderTarget2->Unbind();
+
+			m_screenObject->m_material = m_screenMat2;
+			m_screenObject->Bind();
+			m_screenObject->Render();
+			m_drawCalls++;
+			m_screenObject->Unbind();
+		}
+
+
+
+		if (m_doBloomEffect) {
+
+		}
+
+		if (m_doDistortEffect) {
+			// Update Distort Material parameters
+
+		}
+
+
+
+		//if (!(m_doBloomEffect && m_doDistortEffect)) {
+		//	if (m_doBloomEffect) {
+
+		//	}
+		//	else {
+
+		//	}
+		//}
+		//else {
+
+		//}
+
+		//// Render
+		//if (m_doDistortEffect) {
+		//	m_screenObject->m_material->m_shader = m_distortShader;
+		//	m_screenObject->Bind();
+		//	float move = (float)glfwGetTime();// / 1000.0 * 2 * 3.14159 * .75;
+		//	m_screenObject->m_material->ApplyUniformFloat("distortTime", move);
+		//	m_screenObject->Render();
+		//	m_drawCalls++;
+		//	// Unbind
+		//	m_screenObject->Unbind();
+		//}
+		//// Render
+		//if (m_doBloomEffect) {
+		//	m_screenObject->m_material->m_shader = m_bloomShader;
+		//	m_screenObject->Bind();
+		//	m_screenObject->Render();
+		//	m_drawCalls++;
+		//	// Unbind
+		//	m_screenObject->Unbind();
+		//}
+	}
 
 	return 0;
 }
 
 int ApplicationDemo::GUIDraw()
 {
+	ImGui::Text((std::string("Draw Calls: ") + std::to_string(m_drawCalls)).c_str());
+	ImGui::Text((std::string("RenderTargets: ") + std::to_string(m_renderTargetCalls)).c_str());
+	ImGui::Checkbox("Bloom", &m_doBloomEffect);
+	ImGui::Checkbox("Distort", &m_doDistortEffect);
+
+	//ImGui::Button("Hello", { 60, 30 });
 	return 0;
 }

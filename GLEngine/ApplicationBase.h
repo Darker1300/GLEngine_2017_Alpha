@@ -31,19 +31,19 @@ protected:
 	///<summary>Occurs once before Start. OpenGL is Initialised.</summary>
 	virtual int Initialise();
 	///<summary>Occurs once before FixedUpdate, before main loop.</summary>
-	virtual int Start() { return 0; }
+	virtual int Start();
 	///<summary>Occurs before Update, Restricted to a consistent framerate. eg 60 FPS.</summary>
-	virtual int FixedUpdate(double _deltaTime) { return 0; }
+	virtual int FixedUpdate(double _deltaTime);
 	///<summary>Occurs before LateUpdate.</summary>
-	virtual int Update(double _deltaTime) { return 0; }
+	virtual int Update(double _deltaTime);
 	///<summary>Occurs before Draw.</summary>
-	virtual int LateUpdate(double _deltaTime) { return 0; }
+	virtual int LateUpdate(double _deltaTime);
 	///<summary>Occurs before GUIDraw.</summary>
-	virtual int Draw() { return 0; }
+	virtual int Draw();
 	///<summary>Occurs at the end of main loop.</summary>
-	virtual int GUIDraw() { return 0; }
+	virtual int GUIDraw();
 	///<summary>Occurs once before Finalise, after main loop has ended.</summary>
-	virtual int Shutdown() { return 0; }
+	virtual int Shutdown();
 	///<summary>Occurs once after Shutdown. OpenGL is Finalised.</summary>
 	virtual int Finalise();
 

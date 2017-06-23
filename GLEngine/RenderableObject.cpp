@@ -38,7 +38,7 @@ void RenderableObject::Unbind() const
 bool RenderableObject::FrustrumCollision(const Camera::Frustum& _frustum) const
 {
 	for each (RenderData* rd in m_renderShapes) {
-		if (rd->GetBounds().FrustumCollision(_frustum)) return true;
+		if (rd->GetBounds().FrustumCollision(_frustum, m_transform)) return true;
 	}
 	return false;
 }

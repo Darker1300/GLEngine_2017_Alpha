@@ -3,12 +3,10 @@
 
 #include "ApplicationBase.h"
 
-#include <imgui.h>
-#include "imgui_glfw3.h"
-
 #include <gl_core_4_4.h>
 #include <GlFW/glfw3.h>
 
+#include "imgui_glfw3.h"
 
 ApplicationBase* GLE::APP = nullptr;
 
@@ -103,13 +101,18 @@ void ApplicationBase::Run()
 	if (Finalise()) { LOG_ERROR("ApplicationBase.Finalise Failed.") }
 }
 
-int ApplicationBase::PreInitialise()
+// Run Calls
+///<summary>Occurs once before Initialise.</summary>
+
+inline int ApplicationBase::PreInitialise()
 {
 	GLE::APP = this;
 	return 0;
 }
 
-int ApplicationBase::Initialise()
+///<summary>Occurs once before Start. OpenGL is Initialised.</summary>
+
+inline int ApplicationBase::Initialise()
 {
 	CreateOGLWindow();
 	// imgui
@@ -117,7 +120,37 @@ int ApplicationBase::Initialise()
 	return 0;
 }
 
-int ApplicationBase::Finalise()
+///<summary>Occurs once before FixedUpdate, before main loop.</summary>
+
+inline int ApplicationBase::Start() { return 0; }
+
+///<summary>Occurs before Update, Restricted to a consistent framerate. eg 60 FPS.</summary>
+
+inline int ApplicationBase::FixedUpdate(double _deltaTime) { return 0; }
+
+///<summary>Occurs before LateUpdate.</summary>
+
+inline int ApplicationBase::Update(double _deltaTime) { return 0; }
+
+///<summary>Occurs before Draw.</summary>
+
+inline int ApplicationBase::LateUpdate(double _deltaTime) { return 0; }
+
+///<summary>Occurs before GUIDraw.</summary>
+
+inline int ApplicationBase::Draw() { return 0; }
+
+///<summary>Occurs at the end of main loop.</summary>
+
+inline int ApplicationBase::GUIDraw() { return 0; }
+
+///<summary>Occurs once before Finalise, after main loop has ended.</summary>
+
+inline int ApplicationBase::Shutdown() { return 0; }
+
+///<summary>Occurs once after Shutdown. OpenGL is Finalised.</summary>
+
+inline int ApplicationBase::Finalise()
 {
 	// imgui
 	gui::ImGui_Shutdown();

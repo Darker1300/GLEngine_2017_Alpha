@@ -6,12 +6,12 @@
 class Light
 {
 public:
-	Light();
+	Light(Transform& _transform);
 	~Light();
 
-	glm::vec3 GetForwards();
-	glm::vec3 GetDirection(glm::vec3& _targetPos);
+	glm::vec3 GetForwards() const;
+	glm::vec3 GetDirection(glm::vec3& _targetPos) const;
 
-	Transform m_transform;
+	Transform* m_transform;
 	glm::vec3 m_colour;
 };

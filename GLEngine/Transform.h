@@ -29,8 +29,8 @@ public:
 	~Transform();
 
 	// X:Yaw, Y:Pitch, Z:Roll. Rotated in following order: X, Y, Z
-	glm::mat4 GetRotationMatrix();
-	glm::mat4 GetLocalMatrix();
+	glm::mat4 GetRotationMatrix() const;
+	glm::mat4 GetLocalMatrix() const;
 
 	void SetRotation(const glm::vec3& _rotation) { SetYaw(_rotation[0]); SetPitch(_rotation[1]); SetRoll(_rotation[2]); };
 	void AddRotation(const glm::vec3& _rotation) { SetRotation(forward + _rotation); };
