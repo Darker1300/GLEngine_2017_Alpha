@@ -42,7 +42,8 @@ void ParticleSystem::Initalise(unsigned int a_maxParticles, float a_lifespanMin,
 	m_velocityMax = a_velocityMax;
 	m_lifespanMin = a_lifespanMin;
 	m_lifespanMax = a_lifespanMax;
-	m_maxParticles = a_maxParticles;
+	m_maxParticles = a_maxParticles;
+
 	// create particle array
 	m_particles = new Particle[a_maxParticles];
 	// set our starting ping-pong buffer
@@ -72,7 +73,8 @@ void ParticleSystem::Draw(float time, const glm::mat4 & a_cameraTransform, const
 	// bind emitter's position
 	location = glGetUniformLocation(m_updateShaderID, "emitterPosition");
 	if (location == -1) LOG_ERROR("Uniform failed.", location);
-	glUniform3fv(location, 1, &m_position[0]);
+	glUniform3fv(location, 1, &m_position[0]);
+
 	// disable rasterisation
 	glEnable(GL_RASTERIZER_DISCARD);
 
@@ -92,7 +94,8 @@ void ParticleSystem::Draw(float time, const glm::mat4 & a_cameraTransform, const
 	// disable transform feedback and enable rasterization again
 	glEndTransformFeedback();
 	glDisable(GL_RASTERIZER_DISCARD);
-	glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, 0);
+	glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, 0);
+
 	// draw the particles using the Geometry SHader to billboard them
 	glUseProgram(m_drawShaderID);
 
@@ -107,7 +110,8 @@ void ParticleSystem::Draw(float time, const glm::mat4 & a_cameraTransform, const
 	glDrawArrays(GL_POINTS, 0, m_maxParticles);
 
 	// swap for next frame
-	m_activeBuffer = otherBuffer;
+	m_activeBuffer = otherBuffer;
+
 }
 
 void ParticleSystem::CreateBuffers()
@@ -170,7 +174,8 @@ void ParticleSystem::CreateUpdateShader()
 	const char* varyings[] = { "position", "velocity",
 		"lifetime", "lifespan" };
 	glTransformFeedbackVaryings(m_updateShaderID, 4, varyings,
-		GL_INTERLEAVED_ATTRIBS);
+		GL_INTERLEAVED_ATTRIBS);
+
 	glLinkProgram(m_updateShaderID);
 
 	// remove unneeded handles
@@ -220,5 +225,6 @@ void ParticleSystem::CreateDrawShader()
 	location = glGetUniformLocation(m_drawShaderID, "colourStart");
 	glUniform4fv(location, 1, &m_startColour[0]);
 	location = glGetUniformLocation(m_drawShaderID, "colourEnd");
-	glUniform4fv(location, 1, &m_endColour[0]);
+	glUniform4fv(location, 1, &m_endColour[0]);
+
 }

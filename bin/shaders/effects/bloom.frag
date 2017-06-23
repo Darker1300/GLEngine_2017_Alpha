@@ -10,20 +10,20 @@ out vec4 fragColour;
 
 void main()
 {
-   vec4 sum = vec4(0);
-   int j;
-   int i;
+    vec4 sum = vec4(0);
+    int j;
+    int i;
 
-   for( i= -4 ;i < 4; i++)
-   {
+    for( i= -4 ;i < 4; i++)
+    {
         for (j = -3; j < 3; j++)
         {
             sum += texture2D(colourMap, vUV + vec2(j, i)*0.004) * 0.25;
         }
-   }
-       if (texture2D(depthMap, vUV).r < 0.3)
+    }
+    if (texture2D(depthMap, vUV).r < 0.3)
     {
-       fragColour = sum*sum*0.012 + texture2D(colourMap, vUV);
+        fragColour = sum*sum*0.012 + texture2D(colourMap, vUV);
     }
     else
     {

@@ -15,6 +15,7 @@ class ParticleSystem;
 
 #include "ApplicationBase.h"
 #include <vector>
+#include <glm\vec3.hpp>
 
 class ApplicationDemo : public ApplicationBase
 {
@@ -35,24 +36,22 @@ protected:
 	unsigned int m_drawCalls;
 	unsigned int m_renderTargetCalls;
 
-	Camera* m_camera;
+	Camera* m_camera1;
 
-	Shader* m_primativeShader;
-	Shader* m_basicShader;
 	Shader* m_tintTexShader;
 	Shader* m_phongShader;
 	Shader* m_depthTargetShader;
 	Shader* m_bloomShader;
 	Shader* m_distortShader;
 
-	Texture* m_texWhite;
-	Texture* m_texGroundDiffuse;
-	Texture* m_texGroundSpecular;
-	Texture* m_texGroundNormal;
-	Texture* m_texSignDiffuse;
-	Texture* m_texSpearDiffuse;
-	Texture* m_texSpearSpecular;
-	Texture* m_texSpearNormal;
+	Texture* m_whiteTex;
+	Texture* m_groundDiffuseTex;
+	Texture* m_groundSpecularTex;
+	Texture* m_groundNormalTex;
+	Texture* m_signDiffuseTex;
+	Texture* m_spearDiffuseTex;
+	Texture* m_spearSpecularTex;
+	Texture* m_spearNormalTex;
 
 	RenderTarget* m_renderTarget1;
 	RenderTarget* m_renderTarget2;
@@ -60,7 +59,6 @@ protected:
 	RenderData* m_groundRenderData;
 	RenderData* m_signRenderData;
 	std::vector<RenderData*> m_spearRenderData;
-	//RenderData* m_mirrorRenderData;
 	RenderData* m_screenRenderData;
 	RenderData* m_sphereRenderData;
 
@@ -69,15 +67,17 @@ protected:
 	Material* m_spearMat;
 	Material* m_screenMat1;
 	Material* m_screenMat2;
-	Material* m_lightObjMat;
+	Material* m_depthTargetMat;
 
-	RenderableObject* m_ground;
-	RenderableObject* m_sign;
-	RenderableObject* m_spear;
-	RenderableObject* m_screenObject;
-	RenderableObject* m_light;
+	RenderableObject* m_groundObj;
+	RenderableObject* m_signObj;
+	RenderableObject* m_spearObj;
+	RenderableObject* m_screenObj;
+	RenderableObject* m_lightObj;
 
-	ParticleSystem* m_emitter;
+	ParticleSystem* m_emitter1;
 
-	Light* m_lightAlpha;
+	Light* m_light1;
+	glm::vec3 m_ambientLighting;
+	int m_specPowerLighting;
 };

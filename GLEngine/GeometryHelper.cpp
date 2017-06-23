@@ -79,29 +79,6 @@ namespace GeometryHelper {
 		renderData->SetFloatAttributePointer(4, 4, sizeof(OBJVertex), offsetof(OBJVertex, OBJVertex::bitangent));
 		renderData->Unbind();
 
-		//// Bind VAO (includes VBO & IBO)
-		//renderData->Bind();
-		//// Send Vertices
-		//glBufferData(GL_ARRAY_BUFFER, verticesSize * sizeof(OBJVertex), &vertices[0], GL_STATIC_DRAW);
-		//// Send Indices
-		//glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
-
-		//// Let OpenGL know where to find the data in the vertex
-		//glEnableVertexAttribArray(0);
-		//glEnableVertexAttribArray(1);
-		//glEnableVertexAttribArray(2);
-		//glEnableVertexAttribArray(3);
-		//glEnableVertexAttribArray(4);
-
-		//glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(OBJVertex), (void*)offsetof(OBJVertex, OBJVertex::position));
-		//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(OBJVertex), (void*)offsetof(OBJVertex, OBJVertex::uv));
-		//glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(OBJVertex), (void*)offsetof(OBJVertex, OBJVertex::normal));
-		//glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(OBJVertex), (void*)offsetof(OBJVertex, OBJVertex::tangent));
-		//glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(OBJVertex), (void*)offsetof(OBJVertex, OBJVertex::bitangent));
-
-		//// Unbind VAO (includes VBO & IBO)
-		//renderData->Unbind();
-
 		// Configure RenderData
 		renderData->SetIndicesSize(indicesSize);
 		renderData->SetPrimitiveType(GL_TRIANGLES);

@@ -51,9 +51,6 @@
     <ClCompile Include="Gizmos.cpp">
       <Filter>Source Files\Dependencies</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="RenderData.cpp">
       <Filter>Source Files\GL</Filter>
     </ClCompile>
@@ -64,12 +61,6 @@
       <Filter>Source Files\GL</Filter>
     </ClCompile>
     <ClCompile Include="Transform.cpp">
-      <Filter>Source Files\GL</Filter>
-    </ClCompile>
-    <ClCompile Include="VertexArray.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Loader.cpp">
       <Filter>Source Files\GL</Filter>
     </ClCompile>
     <ClCompile Include="GeometryHelper.cpp">
@@ -84,17 +75,11 @@
     <ClCompile Include="RenderableObject.cpp">
       <Filter>Source Files\GL</Filter>
     </ClCompile>
-    <ClCompile Include="Light.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="RenderTarget.cpp">
       <Filter>Source Files\GL</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files\GL</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleSystem.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BoundingSphere.cpp">
       <Filter>Source Files\GL</Filter>
@@ -108,6 +93,12 @@
     <ClCompile Include="imgui_glfw3.cpp">
       <Filter>Source Files\Dependencies</Filter>
     </ClCompile>
+    <ClCompile Include="ParticleSystem.cpp">
+      <Filter>Source Files\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Source Files\GL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ApplicationBase.h">
@@ -118,9 +109,6 @@
     </ClInclude>
     <ClInclude Include="DEBUG_WINDOWS_ERR_MSG.h">
       <Filter>Header Files\Debug</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RenderData.h">
       <Filter>Header Files\GL</Filter>
@@ -137,12 +125,6 @@
     <ClInclude Include="Transform.h">
       <Filter>Header Files\GL</Filter>
     </ClInclude>
-    <ClInclude Include="VertexArray.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Loader.h">
-      <Filter>Header Files\GL</Filter>
-    </ClInclude>
     <ClInclude Include="GeometryHelper.h">
       <Filter>Header Files\GL</Filter>
     </ClInclude>
@@ -155,9 +137,6 @@
     <ClInclude Include="RenderableObject.h">
       <Filter>Header Files\GL</Filter>
     </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="RenderTarget.h">
       <Filter>Header Files\GL</Filter>
     </ClInclude>
@@ -166,9 +145,6 @@
     </ClInclude>
     <ClInclude Include="Gizmos.h">
       <Filter>Header Files\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleSystem.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BoundingSphere.h">
       <Filter>Header Files\GL</Filter>
@@ -184,6 +160,12 @@
     </ClInclude>
     <ClInclude Include="imgui_glfw3.h">
       <Filter>Header Files\Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleSystem.h">
+      <Filter>Header Files\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Header Files\GL</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

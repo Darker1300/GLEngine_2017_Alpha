@@ -116,6 +116,9 @@
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command> xcopy "$(SolutionDir)bin\*.*" "$(OutDir)"   /Y /I /E </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -151,6 +154,9 @@
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command> xcopy "$(SolutionDir)bin\*.*" "$(OutDir)"   /Y /I /E </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -183,10 +189,8 @@
     <ClCompile Include="Gizmos.cpp" />
     <ClCompile Include="imgui_glfw3.cpp" />
     <ClCompile Include="Light.cpp" />
-    <ClCompile Include="Loader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Material.cpp" />
-    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="RenderableObject.cpp" />
     <ClCompile Include="RenderData.cpp" />
@@ -195,7 +199,6 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="tiny_obj_loader.cc" />
     <ClCompile Include="Transform.cpp" />
-    <ClCompile Include="VertexArray.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\deps\imgui\imconfig.h" />
@@ -211,9 +214,7 @@
     <ClInclude Include="Gizmos.h" />
     <ClInclude Include="imgui_glfw3.h" />
     <ClInclude Include="Light.h" />
-    <ClInclude Include="Loader.h" />
     <ClInclude Include="Material.h" />
-    <ClInclude Include="Mesh.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="RenderableObject.h" />
     <ClInclude Include="RenderData.h" />
@@ -222,7 +223,6 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="tiny_obj_loader.h" />
     <ClInclude Include="Transform.h" />
-    <ClInclude Include="VertexArray.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
