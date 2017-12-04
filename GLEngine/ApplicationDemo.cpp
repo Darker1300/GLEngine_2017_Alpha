@@ -256,7 +256,7 @@ int ApplicationDemo::Draw()
 
 	// Light Getters
 	glm::vec3 lightPos = m_lightObj->m_transform.position;
-	glm::vec3 lightDir = m_light1->GetDirection(m_camera1->position);
+	glm::vec3 lightDir = m_light1->GetDirection(m_spearObj->m_transform.position);
 
 
 
